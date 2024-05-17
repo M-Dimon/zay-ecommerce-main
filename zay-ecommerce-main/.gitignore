@@ -1,4 +1,4 @@
-docker-compose.yml
+
 backend/node_modules/
 backend/backend.Dockerfile
 frontend/node_modules/
