@@ -7,21 +7,34 @@ services:
       - MYSQL_ROOT_PASSWORD: zenmaem
     volumes:
       - db_data:/var/lib/mysql
+    deploy:
+      placement:
+        constraints: [node.role == manager]
   backend:
     image: backend
     depends_on:
       - db
     environment:
-      - DB_HOST=db
-      - DB_USER=root
-      - DB_PASS=root
-      - DB_NAME=zay
+      - DB_HOSTNAME=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=zenmaem
+      - DB_DATABASE=zay
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints: [node.role == worker]
   frontend: 
     image: frontend
     depends_on:
       - backend
     ports:
       - "80:80"
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints: [node.role == worker]
 
 volumes:
   db_data:
