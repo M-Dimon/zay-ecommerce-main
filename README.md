@@ -149,13 +149,13 @@ Below are the emails and github profiles for the 3 students responsible for the 
 
 Emilie
 <br>
-Email:
+Email: ebha38482@edu.ucl.dk
 <br>
 Github: https://github.com/Reitc
 
 Helene:
 <br>
-Email:
+Email: hmlm56862@edu.ucl.dk
 <br>
 Github: https://github.com/Zentia-DK
 
