@@ -127,45 +127,43 @@ To clone the github repository you run the following command:
  git clone <git repo clone link>
  ```
 
-Once the repository has been cloned
+Once the repository has been cloned on node 1, you can setup the images, containers along with the docker swarm.
 
-### Installation
+### Build the site
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+To build the site itself you need to start with setting up the nessesary images and containers. In order to work with the repository it is first nessesary to ensure you are in the correct folder in the repository. As the team have created their own repository, and then added a clone of the repository which was handed out by the teacher the webshop is in the zen-ecconomy-main folder inside the repository which also has the same name. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+This project can be used to create the base for a webshop, with a databse, all which runs in a containerizes enviroment. As such this repository can be used to better understand how to setup a webshop and what you need to write in the dockerfile and docker-compose file to get create the containerization enviroment. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Below are the emails and github profiles for the 3 students responsible for the solution represented in this repository. 
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Emilie
+<br>
+Email:
+<br>
+Github: https://github.com/Reitc
+
+Helene:
+<br>
+Email:
+<br>
+Github: https://github.com/Zentia-DK
+
+Maria:
+<br>
+Email: mndi32110@edu.ucl.dk
+<br>
+Github: https://github.com/M-Dimon
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
