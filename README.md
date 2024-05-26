@@ -26,7 +26,7 @@ It is only to be used for the exam, and has no other purpose.
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
-       <li><a href="# Step by step of testing Docker Swarm Cluster"> Step by step of testing Docker Swarm Cluster</a></li>
+       <li><a href="#StepbystepoftestingDockerSwarmCluster">Step by step of testing Docker Swarm Cluster</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
