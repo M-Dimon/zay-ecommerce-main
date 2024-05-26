@@ -26,6 +26,7 @@ It is only to be used for the exam, and has no other purpose.
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+       <li><a href="# Step by step of testing Docker Swarm Cluster"> Step by step of testing Docker Swarm Cluster</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -135,6 +136,67 @@ To build the site itself you need to start with setting up the nessesary images 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+###  Step by step of testing Docker Swarm Cluster
+<br>
+## 1. Initial Setup Verification
+Verify node status: Use docker node ls on the manager node to ensure all nodes are connected and functioning correctly.
+# bash
+ ```sh
+docker node ls
+ ```
+## Result of test
+<br>
+
+## 2. Deployment Test
+Deploy a simple service: Deploy a simple Docker service (e.g., nginx) and verify that all replicas are running.
+# bash
+```sh
+docker service create --name test-service --replicas 3 -p 80:80 nginx
+docker service ls
+docker service ps test-service
+```
+## Result of test
+<br>
+
+## 3. Scaling Test
+Scale the service: Scale the service up and down to ensure Swarm can handle changes in workload.
+# bash
+```sh
+docker service scale test-service=5
+docker service ps test-service
+docker service scale test-service=2
+docker service ps test-service
+```
+## Result of test
+<br>
+## 4. Failover Test
+Simulate node failure: Turn off a worker node and verify that Swarm redirects the workload to the remaining nodes.
+#bash
+```sh
+docker node update --availability drain <NODE-ID>
+docker service ps test-service
+```
+## Result of test
+<br>
+## 5. Health Check Test
+Monitor service health: Implement health checks and monitor that Swarm restarts containers that fail.
+# bash
+```sh
+docker service update --update-monitor 10s --health-cmd 'curl -f http://localhost || exit 1' --health-interval 30s --health-retries 3 test-service
+docker service ps test-service
+```
+## Result of test
+<br>
+
+## 6. Persistent Storage Test
+Test persistent storage: Create a service that uses volumes and confirm that data is preserved across container restarts.
+# bash
+```sh
+docker service create --name volume-test --replicas 1 -v test-volume:/data busybox sh -c "while true; do echo 'Hello, World!' >> /data/testfile; sleep 5; done"
+docker service ps volume-test
+```
+## Result of test
+<br>
 <!-- USAGE EXAMPLES -->
 ## Usage
 
