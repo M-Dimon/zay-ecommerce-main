@@ -285,7 +285,8 @@ docker service ps test-service
 ```
 # Result of test
 Scale Up: docker service scale test-service=5 to increase replicas to 5. 
-Verify Scaling Up: docker service ps test-service to ensure 5 replicas are running. Scale Down: docker service scale test-service=2 to decrease replicas to 2. 
+Verify Scaling Up: docker service ps test-service to ensure 5 replicas are running. 
+Scale Down: docker service scale test-service=2 to decrease replicas to 2. 
 Verify Scaling Down: docker service ps test-service to ensure only 2 replicas are running. 
 This ensures Docker Swarm can handle scaling the service up and down effectively.
 <br>
