@@ -25,8 +25,13 @@ It is only to be used for the exam, and has no other purpose.
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-       <li><a href="#StepbystepoftestingDockerSwarmCluster">Step by step of testing Docker Swarm Cluster</a></li>
+        <li><a href="#setting-up-the-nodes">Setting up the nodes</a></li>
+        <li><a href="#git-clone">Github Clone</a></li>
+        <li><a href="#build-the-site">Build the site</a></li>
+        <li><a href="#build-images">Build Images</a></li>
+        <li><a href="#seeding-the-database">Seeding the database</a></li>
+        <li><a href="#stack-deploy">Stack Deploy</a></li>
+       <li><a href="#step-by-step-of-testing-docker-swarm-cluster">Step by step of testing Docker Swarm Cluster</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -44,8 +49,6 @@ This repository is a copy of the elective course material for the Containerizati
 
 For the exam the team was tasked with creating a containerized version of the webshop in the repository, with Docker and Docker swarm. Furthermore a part of the exam revolves around setting up the repository and webshop on 3 nodes, which the school have provided. 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Built With
 
 The project has made use of the following to setup the solutions. 
@@ -55,7 +58,7 @@ The project has made use of the following to setup the solutions.
 * [![MySQL][MySQL-icon]][MySQL-url]
 * [![phpMyAdmin][phpMyAdmin-icon]][phpMyAdmin-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#zay-commerce-exam">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -77,6 +80,9 @@ Furthermore, in order to use the nodes with a wireless wifi connection you need 
 To install the nessesary programs you need to write a series of commands on the 3 nodes, however, first you need to ensure the 3 nodes have access to wifi and are up to date. 
 <br>
 In the 00-installer-config-wifi.yml file you correct the information about the connection. Here you need to write the information for your wifi under the access-point, both the name and the password for it. 
+<br>
+![wifi-config]
+* In the image about you can see how the team has changed the information to their network, Con-Linux and also the password for said internet.
 
 <br>
 Once the nodes have wifi you can run the following commands to ensure the nodes are up to date. 
@@ -154,6 +160,8 @@ In order to make it easier to use the join token commands on the other nodes, th
  ip a
  # When ip a is used it generates a list where you can see the ip address for the node. 
 ```
+This is an example of what the ip a command shows and what you need. <br>
+![ip-a] <br>
 Then you can simply copy the join token and use it on the other nodes to join the swarm. Once all the nodes are a part of the swarm, we can then do a git clone on the manager node, and then a stack deploy to deploy the repository to the other nodes. 
 
 #### Github Clone
@@ -227,7 +235,7 @@ We also have a volume called db_data, which is used in connection with the mysql
 
 * Please note the current repository makes use of docker hub for the frontend and backend, as such the files themselves gets fetched from docker hub after they have been created. 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#zay-commerce-exam">back to top</a>)</p>
 
 ###  Step by step of testing Docker Swarm Cluster
 <br>
@@ -242,6 +250,8 @@ docker node ls
 # Result of test
 Command Execution: The command docker node ls is run on the manager node of a Docker Swarm cluster.
 Commands a lists all the nodes that are part of the Docker Swarm cluster.
+<br>
+![test-img-1]
 
 <br>
 
@@ -258,7 +268,10 @@ docker service ps test-service
 Deploy Service: docker service create --name test-service --replicas 3 -p 80:80 nginx List Services: docker service ls to check the service is running. 
 Verify Replicas: docker service ps test-service to ensure all 3 replicas are active.
 This ensures the Docker Swarm deployment is functioning correctly.
-
+<br>
+![test-img-2]
+<br>
+![test-img-3]
 <br>
 
 ## 3. Scaling Test
@@ -276,7 +289,10 @@ Verify Scaling Up: docker service ps test-service to ensure 5 replicas are runni
 Verify Scaling Down: docker service ps test-service to ensure only 2 replicas are running. 
 This ensures Docker Swarm can handle scaling the service up and down effectively.
 <br>
-
+![test-img-4]
+<br>
+![test-img-5]
+<br>
 
 ## 4. Failover Test
 Simulate node failure: Turn off a worker node and verify that Swarm redirects the workload to the remaining nodes.
@@ -289,7 +305,8 @@ docker service ps test-service
 Simulate Node Failure: docker node update --availability drain <NODE-ID> to drain a worker node. 
 Verify Failover: docker service ps test-service to ensure the workload is redirected to remaining nodes. 
 This tests that Docker Swarm properly handles node failures by redistributing tasks.
-
+<br>
+![test-img-6]
 <br>
 
 ## 5. Health Check Test
@@ -304,6 +321,8 @@ Implement Health Checks: docker service update --update-monitor 10s --health-cmd
 Monitor Service Health: docker service ps test-service to ensure Swarm restarts any failing containers. 
 This ensures Docker Swarm can monitor and maintain the health of the service by restarting unhealthy containers.
 <br>
+![test-img-7]
+<br>
 
 ## 6. Persistent Storage Test
 
@@ -316,12 +335,14 @@ docker service ps volume-test
 # Result of test
 We tried to perform the last test, but it would not create the new file. However, it is something that can be included for further investigation and development to find out why it would not execute the test
 <br>
+![test-img-8]
+<br>
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 This project can be used to create the base for a webshop, with a databse, all which runs in a containerizes enviroment. As such this repository can be used to better understand how to setup a webshop and what you need to write in the dockerfile and docker-compose file to get create the containerization enviroment. 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#zay-commerce-exam">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
@@ -346,14 +367,9 @@ Email: mndi32110@edu.ucl.dk
 <br>
 Github: https://github.com/M-Dimon
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[product-screenshot]: images/screenshot.png
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/
 [Docker-icon]: https://img.shields.io/badge/Docker-f0f0f0?logo=Docker
@@ -364,3 +380,17 @@ Github: https://github.com/M-Dimon
 [MySQL-url]: https://www.mysql.com/
 [phpMyAdmin-icon]: https://img.shields.io/badge/phpMyAdmin-fff?logo=phpMyAdmin
 [phpMyAdmin-url]: https://www.phpmyadmin.net/
+
+<!-- IMAGES -->
+[wifi-config]: readme-images/wifi-config.PNG
+[ip-a]: readme-images/ip-a.PNG
+[test-img-1]: readme-images/1.docker_node_ls.png
+[test-img-2]: readme-images/2.create-a-service.png
+[test-img-3]: readme-images/3.docker.service.ls.png
+[test-img-4]: readme-images/4.scale_up_test_service.png
+[test-img-5]: readme-images/5.scale_down_test_service.png
+[test-img-6]: readme-images/6.Simulate_shut_down_with_drain.png
+[test-img-7]: readme-images/7.activate_shut_down_node.png
+[test-img-8]: readme-images/8.health_check.png
+
+<p align="right">(<a href="#zay-commerce-exam">back to top</a>)</p>
