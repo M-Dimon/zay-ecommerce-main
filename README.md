@@ -231,6 +231,7 @@ We also have a volume called db_data, which is used in connection with the mysql
 
 ###  Step by step of testing Docker Swarm Cluster
 <br>
+
 ## 1. Initial Setup Verification
 Verify node status: Use docker node ls on the manager node to ensure all nodes are connected and functioning correctly.
 #bash
@@ -238,7 +239,10 @@ Verify node status: Use docker node ls on the manager node to ensure all nodes a
  ```sh
 docker node ls
  ```
-## Result of test
+# Result of test
+Command Execution: The command docker node ls is run on the manager node of a Docker Swarm cluster.
+Commands a lists all the nodes that are part of the Docker Swarm cluster.
+
 <br>
 
 ## 2. Deployment Test
@@ -250,11 +254,14 @@ docker service create --name test-service --replicas 3 -p 80:80 nginx
 docker service ls
 docker service ps test-service
 ```
-## Result of test
+# Result of test
+Deploy Service: docker service create --name test-service --replicas 3 -p 80:80 nginx List Services: docker service ls to check the service is running. 
+Verify Replicas: docker service ps test-service to ensure all 3 replicas are active.
+This ensures the Docker Swarm deployment is functioning correctly.
+
 <br>
 
 ## 3. Scaling Test
-
 Scale the service: Scale the service up and down to ensure Swarm can handle changes in workload.
 bash
 ```sh
@@ -263,27 +270,39 @@ docker service ps test-service
 docker service scale test-service=2
 docker service ps test-service
 ```
-## Result of test
+# Result of test
+Scale Up: docker service scale test-service=5 to increase replicas to 5. 
+Verify Scaling Up: docker service ps test-service to ensure 5 replicas are running. Scale Down: docker service scale test-service=2 to decrease replicas to 2. 
+Verify Scaling Down: docker service ps test-service to ensure only 2 replicas are running. 
+This ensures Docker Swarm can handle scaling the service up and down effectively.
 <br>
-## 4. Failover Test
 
+
+## 4. Failover Test
 Simulate node failure: Turn off a worker node and verify that Swarm redirects the workload to the remaining nodes.
 bash
 ```sh
 docker node update --availability drain <NODE-ID>
 docker service ps test-service
 ```
-## Result of test
-<br>
-## 5. Health Check Test
+# Result of test
+Simulate Node Failure: docker node update --availability drain <NODE-ID> to drain a worker node. 
+Verify Failover: docker service ps test-service to ensure the workload is redirected to remaining nodes. 
+This tests that Docker Swarm properly handles node failures by redistributing tasks.
 
+<br>
+
+## 5. Health Check Test
 Monitor service health: Implement health checks and monitor that Swarm restarts containers that fail.
 bash
 ```sh
 docker service update --update-monitor 10s --health-cmd 'curl -f http://localhost || exit 1' --health-interval 30s --health-retries 3 test-service
 docker service ps test-service
 ```
-## Result of test
+# Result of test
+Implement Health Checks: docker service update --update-monitor 10s --health-cmd 'curl -f http://localhost || exit 1' --health-interval 30s --health-retries 3 test-service to add health checks to the service. 
+Monitor Service Health: docker service ps test-service to ensure Swarm restarts any failing containers. 
+This ensures Docker Swarm can monitor and maintain the health of the service by restarting unhealthy containers.
 <br>
 
 ## 6. Persistent Storage Test
@@ -294,7 +313,8 @@ bash
 docker service create --name volume-test --replicas 1 -v test-volume:/data busybox sh -c "while true; do echo 'Hello, World!' >> /data/testfile; sleep 5; done"
 docker service ps volume-test
 ```
-## Result of test
+# Result of test
+We tried to perform the last test, but it would not create the new file. However, it is something that can be included for further investigation and development to find out why it would not execute the test
 <br>
 <!-- USAGE EXAMPLES -->
 ## Usage
