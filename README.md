@@ -69,6 +69,7 @@ The team also created a file which is used later in the process to seed the data
 To make the solution you need 3 computers which can be used as nodes for the setup, all of which need to have the following programmes installed. 
 * Docker - So you can set up and add the nodes to a swarm and thus connect them to one another.
 * Node Package Manager - So you can install the nessesary dependencies for the repo
+The computer nodes is setup to be Linux, since there is used Ubuntu, the default CLI that will is used is Bash shell.
 <br>
 Furthermore, in order to use the nodes with a wireless wifi connection you need to correct the informaiton written in the 00-installer-config-wifi.yml files within the /etc/netplan folder on the nodes. This step can be omitted when using a direct connection to the internet through a switch and a router, where all nodes are connected. 
 
