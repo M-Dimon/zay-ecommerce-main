@@ -1,17 +1,28 @@
 version: '3.9'
 services:
   db:
-    image: mysql
+    image: mysql:latest
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD: zenmaem
+      - MYSQL_ROOT_PASSWORD=zenmaem
+      - MYSQL_HOST=%
+      - MYSQL_DATABASE=zay
+      - MYSQL_PASSWORD=zenmaem
     volumes:
       - db_data:/var/lib/mysql
     deploy:
       placement:
         constraints: [node.role == manager]
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=db
+      - MYSQL_ROOT_PASSWORD=zenmaem
   backend:
-    image: backend
+    image: dimocube/cl_backend
     depends_on:
       - db
     environment:
@@ -19,17 +30,20 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=zenmaem
       - DB_DATABASE=zay
+    ports:
+      - "3000:3000"
     deploy:
       mode: replicated
       replicas: 2
       placement:
         constraints: [node.role == worker]
-  frontend: 
-    image: frontend
+
+  frontend:
+    image: dimocube/cl_frontend
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "80:5173"
     deploy:
       mode: replicated
       replicas: 2
