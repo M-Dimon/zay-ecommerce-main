@@ -46,8 +46,6 @@ For the exam the team was tasked with creating a containerized version of the we
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 ### Built With
 
 The project has made use of the following to setup the solutions. 
@@ -58,8 +56,6 @@ The project has made use of the following to setup the solutions.
 * [![phpMyAdmin][phpMyAdmin-icon]][phpMyAdmin-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -73,11 +69,13 @@ The team also created a file which is used later in the process to seed the data
 To make the solution you need 3 computers which can be used as nodes for the setup, all of which need to have the following programmes installed. 
 * Docker - So you can set up and add the nodes to a swarm and thus connect them to one another.
 * Node Package Manager - So you can install the nessesary dependencies for the repo
-Furthermore, in order to use the nodes with a wireless wifi connection you need to correct the informaiton written in the 00-installer-config-wifi.yml files within the /etc/netplan folder. This step can be omitted when using a direct connection to the internet through a switch and a router, where all nodes are connected. 
+<br>
+Furthermore, in order to use the nodes with a wireless wifi connection you need to correct the informaiton written in the 00-installer-config-wifi.yml files within the /etc/netplan folder on the nodes. This step can be omitted when using a direct connection to the internet through a switch and a router, where all nodes are connected. 
 
-In order to install the nessesary programs you need to write a series of commands on the 3 nodes, however, first you need to ensure the 3 nodes have access to wifi and are up to date. 
+To install the nessesary programs you need to write a series of commands on the 3 nodes, however, first you need to ensure the 3 nodes have access to wifi and are up to date. 
 <br>
 In the 00-installer-config-wifi.yml file you correct the information about the connection. Here you need to write the information for your wifi under the access-point, both the name and the password for it. 
+
 <br>
 Once the nodes have wifi you can run the following commands to ensure the nodes are up to date. 
 
@@ -120,19 +118,112 @@ Once the setup is complete you can move on to installing the other programs.
 
  npm --version
  ```
-Once you have installed Docker and NPM on the nodes, it is time to clone the repository down on the nodes. This is done by cloning it to 1 node which is gonna be the managing node and then using docker swarm to deploy it to the other nodes. 
+Once you have installed Docker and NPM on the nodes, it is time to move onto setting up the nodes, and creating and connecting them to a a swarm so that they can work together.
 
-To clone the github repository you run the following command:
-* Setup
+### Setting up the nodes
+To set up the nodes the first step is to change the host and hostname on all 3 nodes to make it easier to identify which node is which. To do this you use the following command to enter the area where you need to change the name.
+
  ```sh
- git clone <git repo clone link>
+ # To change the host.
+ sudo vim host
+ # Once in you can then change the name for the host.
+
+# To change the hostname.
+ sudo vim hostname
+ # Once in you can then change the name for the hostname.
  ```
 
-Once the repository has been cloned on node 1, you can setup the images, containers along with the docker swarm.
+For this project the team have named the 3 nodes, node01, node02 and node03, and have decided that node01 will become the manager of the swarm, to make it easier to remember. 
+
+Now that we have named the nodes, we then use node01 to initiate the swarm and to generate the join token for the other nodes. This is done with the following commands:
+```sh
+ # Initiate the swarm
+ docker swarm init
+ # This will initialise the swarm, and make the node which it is used on into the manager for the swarm.
+
+ # Generate join-token for workers
+ docker swarm join-token worker
+ # This will then generate the command you need to run on the other nodes
+```
+In order to make it easier to use the join token commands on the other nodes, the team decided to ssh into the nodes from another pc. To do this use the following command on you pc's terminal:
+```sh
+ ssh user@<ip address>
+ # Please note the ip address is the nodes ip, which can be found on the node with the following command:
+ ip a
+ # When ip a is used it generates a list where you can see the ip address for the node. 
+```
+Then you can simply copy the join token and use it on the other nodes to join the swarm. Once all the nodes are a part of the swarm, we can then do a git clone on the manager node, and then a stack deploy to deploy the repository to the other nodes. 
+
+#### Github Clone
+To clone the github repository, you run the following commands: 
+ ```sh
+ # Clone repository.
+ git clone <git repo clone link>
+ # This will clone the repository down on the node.
+ ```
+ * Note once the git repository has been cloned you need to cd into the correct folder to work with the repository. 
 
 ### Build the site
+To build the site itself you need to start with setting up the nessesary images and containers. 
+* Please ensure you are in the correct folder when working with the project, the team have created their own repository, and added a clone of the repository from the teacher. The webshop is in the zen-ecconomy-main folder inside the repository which also has the same name. 
 
-To build the site itself you need to start with setting up the nessesary images and containers. In order to work with the repository it is first nessesary to ensure you are in the correct folder in the repository. As the team have created their own repository, and then added a clone of the repository which was handed out by the teacher the webshop is in the zen-ecconomy-main folder inside the repository which also has the same name. 
+To build the site you first need to install the dependencies for the project, and then update the nodes themselves afterwards. To do this use the following commands:
+```sh
+ npm install
+ # This will install all the dependencies that are represented in the package.json file.
+
+ sudo apt update
+ # To update the node, which is needed now that more things have been installed. 
+```
+* For the project to fully work please make sure to run the npm install command in the main folder, backend folder and frontend folder, as they all have a list of dependencies. 
+
+Once the dependencies have been installed, you can then build the images and the container for the site, along with the database.
+#### Build Images
+For the project we have created some images for the  frontend, backend, db and phpmyadmin. These are created using the dockerfiles and then run using the docker-compose.yml file. 
+
+To build the 2 images you first need to cd into the folders, once for the backend and once for the frontend. In the terminal use the following commands:
+```sh
+ # Frontend
+ cd frontend
+ # Go to frontend folder
+ docker build -t frontend 
+ # Build the image
+ docker run -p 80:80 frontend
+ # To build the container
+
+
+ # Backend
+ cd backend
+ # Go to the backend folder
+ docker build -t backend
+ # Build the image
+ docker run -p 80:80 backend
+ # To build the container.
+```
+Now the 2 images, frontend and backend have been created, and the container has also been build. 
+
+#### Seeding the database
+
+When using the command to deploy the stack it is not just the images that will be build and run. In the backend dockerfile there is some commands for seeding the database that activate when you build the image. 
+
+In this case the team made use of an extra file called seed.sh, which contains the commands needed to reset and then seed the database, with a small delay inbetween. The dockerfile then specifies the seed.sh file as a entry point for this, and will thus run the commands in it to seed the database. 
+
+You can also run the commands manually instead, however this makes it more streamlined, and limits the amount of commands you have to write. 
+
+#### Stack Deploy
+With the images for the frontend and backend build you then need to run the following command to deploy the actual site.
+```sh
+ # Stack Deploy
+ docker stack deploy --compose-file docker-compose.yml <name>
+ # Note <name> is the name you give it, the <> is not needed. 
+```
+* This will setup the remainding db and phpmyadmin images and also run the actual images. Furthermore, the code written in the docker-compose.yml file, under deploy will create replicas of the images in the specified location. 
+
+In the docker-compose.yml file the team has specified which node role is responsiple for which image, along with how many replicas need to be made. Furthermore, the file also contains the information needed to access the database. For this the team has also setup phpMyAdmin as a gui for database management.
+
+We also have a volume called db_data, which is used in connection with the mysql database. The database gets its content and data from a file which is a part of the original repository from the teacher. 
+
+* Please note the current repository makes use of docker hub for the frontend and backend, as such the files themselves gets fetched from docker hub after they have been created. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
